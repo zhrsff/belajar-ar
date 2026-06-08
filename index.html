@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AR Pertama Saya</title>
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+    </script>
+</head>
+<body>
+    <script type="module">
+        import * as THREE from 'three';
+        import { ARButton } from 'three/addons/webxr/ARButton.js';
+
+        // 1. Inisialisasi Dunia Virtual
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.xr.enabled = true; 
+        document.body.appendChild(renderer.domElement);
+
+        // 2. Tambahkan Tombol AR ke Layar
+        document.body.appendChild(ARButton.createButton(renderer));
+
+        // 3. Tambahkan Objek (Kubus Merah)
+        const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const cube = new THREE.Mesh(geometry, material);
+        cube.position.z = -0.5; // Muncul 50cm di depan kamera
+        scene.add(cube);
+
+        // 4. Jalankan Animasi
+        renderer.setAnimationLoop(() => {
+            cube.rotation.y += 0.01; // Kubus berputar pelan
+            renderer.render(scene, camera);
+        });
+    </script>
+</body>
+</html>
